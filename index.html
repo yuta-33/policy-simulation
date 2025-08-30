@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>政策立案予算シミュレーションアプリ</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="app-title">
+                <i class="fas fa-chart-line"></i>
+                政策立案予算シミュレーション
+            </h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="newProjectBtn">
+                    <i class="fas fa-plus"></i> 新規作成
+                </button>
+                <button class="btn btn-secondary" id="saveBtn">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+                <button class="btn btn-outline" id="exportBtn">
+                    <i class="fas fa-download"></i> データ出力
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツエリア -->
+    <main class="main-content">
+        <!-- サマリーKPIエリア -->
+        <section class="summary-kpi-section">
+            <div class="kpi-grid">
+                <div class="kpi-card" id="proposedBudgetCard">
+                    <div class="kpi-icon">
+                        <i class="fas fa-yen-sign"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>提案事業予算</h3>
+                        <p class="kpi-value" id="proposedBudgetValue">¥0</p>
+                    </div>
+                </div>
+                
+                <div class="kpi-card" id="averageBudgetCard">
+                    <div class="kpi-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>類似事業平均予算</h3>
+                        <p class="kpi-value" id="averageBudgetValue">¥0</p>
+                    </div>
+                </div>
+                
+                <div class="kpi-card" id="budgetComparisonCard">
+                    <div class="kpi-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>予算比較（過不足）</h3>
+                        <p class="kpi-value" id="budgetComparisonValue">¥0</p>
+                    </div>
+                </div>
+                
+                <div class="kpi-card" id="similarProjectsCard">
+                    <div class="kpi-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>類似事業件数</h3>
+                        <p class="kpi-value" id="similarProjectsValue">0件</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2カラムレイアウト -->
+        <div class="two-column-layout">
+            <!-- 左カラム：記入枠エリア -->
+            <section class="input-section">
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-edit"></i>
+                        新規事業計画
+                    </h2>
+                    
+                    <form id="projectForm" class="project-form">
+                        <div class="form-group">
+                            <label for="currentSituation">現状・目的（課題）</label>
+                            <textarea 
+                                id="currentSituation" 
+                                name="currentSituation" 
+                                rows="4" 
+                                placeholder="事業が解決しようとしている現状の課題や目的を記述してください..."
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectName">事業名</label>
+                            <input 
+                                type="text" 
+                                id="projectName" 
+                                name="projectName" 
+                                placeholder="課題解決策としての事業の名称を入力してください"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectOverview">事業概要（課題解決策）</label>
+                            <textarea 
+                                id="projectOverview" 
+                                name="projectOverview" 
+                                rows="4" 
+                                placeholder="課題解決策としての具体的な事業内容を記述してください..."
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="initialBudget">当初予算</label>
+                            <div class="budget-input-wrapper">
+                                <span class="currency-symbol">¥</span>
+                                <input 
+                                    type="number" 
+                                    id="initialBudget" 
+                                    name="initialBudget" 
+                                    placeholder="0" 
+                                    min="0" 
+                                    step="1000"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-large" id="analyzeBtn">
+                                <i class="fas fa-search"></i>
+                                過去事例と比較分析する
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 右カラム：反映枠エリア -->
+            <section class="analysis-section">
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-chart-pie"></i>
+                        類似の過去事業 分析結果
+                    </h2>
+                    
+                    <!-- タブ機能 -->
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="all">
+                            <i class="fas fa-list"></i> すべて
+                        </button>
+                        <button class="tab-btn" data-tab="high-rated">
+                            <i class="fas fa-star"></i> 高評価事業
+                        </button>
+                        <button class="tab-btn" data-tab="needs-improvement">
+                            <i class="fas fa-exclamation-triangle"></i> 要改善事業
+                        </button>
+                        <button class="tab-btn" data-tab="history">
+                            <i class="fas fa-history"></i> 履歴
+                        </button>
+                    </div>
+                    
+                    <!-- 事例リスト -->
+                    <div class="projects-list" id="projectsList">
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <p>分析を実行すると、類似の過去事業がここに表示されます</p>
+                        </div>
+                    </div>
+
+                    <!-- 履歴表示エリア -->
+                    <div class="history-section" id="historySection" style="display: none;">
+                        <div class="history-header">
+                            <h3>分析履歴</h3>
+                            <div class="history-controls">
+                                <button class="btn btn-outline btn-small" id="refreshHistoryBtn">
+                                    <i class="fas fa-sync-alt"></i> 更新
+                                </button>
+                                <button class="btn btn-outline btn-small" id="exportHistoryBtn">
+                                    <i class="fas fa-download"></i> エクスポート
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="history-filters">
+                            <div class="filter-group">
+                                <label for="statusFilter">ステータス:</label>
+                                <select id="statusFilter">
+                                    <option value="">すべて</option>
+                                    <option value="success">成功</option>
+                                    <option value="error">エラー</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="dateFromFilter">開始日:</label>
+                                <input type="date" id="dateFromFilter">
+                            </div>
+                            <div class="filter-group">
+                                <label for="dateToFilter">終了日:</label>
+                                <input type="date" id="dateToFilter">
+                            </div>
+                            <button class="btn btn-primary btn-small" id="applyFiltersBtn">
+                                <i class="fas fa-filter"></i> フィルター適用
+                            </button>
+                        </div>
+                        
+                        <div class="history-list" id="historyList">
+                            <div class="empty-state">
+                                <i class="fas fa-history"></i>
+                                <p>分析履歴がここに表示されます</p>
+                            </div>
+                        </div>
+                        
+                        <div class="history-pagination" id="historyPagination" style="display: none;">
+                            <button class="btn btn-outline btn-small" id="prevPageBtn">
+                                <i class="fas fa-chevron-left"></i> 前へ
+                            </button>
+                            <span class="page-info" id="pageInfo">1 / 1</span>
+                            <button class="btn btn-outline btn-small" id="nextPageBtn">
+                                次へ <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- データ分析レポート -->
+                    <div class="data-analysis-report">
+                        <h3>データ分析レポート</h3>
+                        <div class="report-placeholder">
+                            <i class="fas fa-chart-area"></i>
+                            <p>将来的な機能拡張のためのプレースホルダー</p>
+                            <p>類似事業の予算分布や評価の内訳などのグラフ表示を想定</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- プロジェクト詳細モーダル -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalProjectName">事業詳細</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- モーダルの内容はJavaScriptで動的に生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 成功・エラーメッセージ -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
