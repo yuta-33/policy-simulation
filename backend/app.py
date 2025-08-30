@@ -53,10 +53,7 @@ def initialize_services():
         logger.error(traceback.format_exc())
         raise
 
-@app.before_first_request
-def before_first_request():
-    """初回リクエスト前に実行"""
-    initialize_services()
+initialize_services()
 
 @app.route('/health', methods=['GET'])
 def health_check():
