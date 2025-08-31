@@ -32,7 +32,7 @@ class Config:
     DEBUG = True
     
     # CORS設定
-    CORS_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:5000', 'http://localhost:5000']
+    CORS_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:5000', 'http://localhost:5000','https://policy-simulation.onrender.com']
     
     @classmethod
     def get_vector_file_path(cls):
