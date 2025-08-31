@@ -528,7 +528,7 @@ class PolicyBudgetSimulator {
             if (dateTo) params.append('date_to', dateTo);
             
             // バックエンドAPIから履歴を取得
-            const response = await fetch(`http://localhost:5000/logs?${params}`);
+            const response = await fetch(`https://policy-simulation-backend.onrender.com`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
