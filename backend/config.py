@@ -8,7 +8,7 @@ class Config:
     """アプリケーション設定クラス"""
     
     # OpenAI API設定
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
     OPENAI_MODEL = 'text-embedding-3-small'
     
     # ベクトル化設定
