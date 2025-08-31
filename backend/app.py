@@ -53,10 +53,11 @@ def initialize_services():
         logger.error(traceback.format_exc())
         raise
 
-@app.before_first_request
-def before_first_request():
-    """初回リクエスト前に実行"""
+# 古い@app.before_first_requestを削除し、アプリ起動時に直接サービスを初期化します。
+try:
     initialize_services()
+except Exception as e:
+    logger.error("アプリケーションの起動時初期化に失敗しました。")
 
 @app.route('/health', methods=['GET'])
 def health_check():
