@@ -187,7 +187,7 @@ class DataProcessor:
         
         try:
             # CSVファイルのパスを設定
-            csv_path = os.path.join(os.path.dirname(os.path.dirname(__file__), '..', 'data', 'final_2024.csv')
+            csv_path = 'final_2024.csv'
             
             if not os.path.exists(csv_path):
                 raise FileNotFoundError(f"CSVファイルが見つかりません: {csv_path}")
